@@ -16,39 +16,37 @@ class Rzdtemp():
         self.base_url = "http://ticket.rzd.ru/"
         self.verificationErrors = []
 
-    def test_rzdtemp(self):
+    def test_rzdtemp(self, city1, city2, date):
 
         self.logger.info('Вход...')
 
         driver = self.driver
         driver.get(self.base_url)
         
-        el = '25.08.2023'
-        
         driver.find_element(By.ID, "direction-from").clear()
-        driver.find_element(By.ID, "direction-from").send_keys('Москва')
+        driver.find_element(By.ID, "direction-from").send_keys(city1)
         driver.find_element(By.CSS_SELECTOR, "div[class='rzd-direction rzd-direction-from'] li:nth-child(2)")
         time.sleep(1)
         driver.find_element(By.ID, "direction-to").clear()
-        driver.find_element(By.ID, "direction-to").send_keys('Санкт-Петербург')
+        driver.find_element(By.ID, "direction-to").send_keys(city2)
         driver.find_element(By.CSS_SELECTOR, "div[class='rzd-direction rzd-direction-to'] li:nth-child(2)")
         time.sleep(1)
         driver.find_element(By.ID, "datepicker-from").clear()
-        driver.find_element(By.ID, "datepicker-from").send_keys(el)
+        driver.find_element(By.ID, "datepicker-from").send_keys(date)
         time.sleep(1)
         driver.find_element(By.CSS_SELECTOR, ".rzd-button-wrapper.rzd-cell.rzd-cell-15").click()
         
         #driver.find_element(By.ID, "direction-from").clear()
-        driver.find_element(By.ID, "direction-from").send_keys('Москва')
+        driver.find_element(By.ID, "direction-from").send_keys(city1)
         driver.find_element(By.CSS_SELECTOR, "div[class='rzd-direction rzd-direction-from'] li:nth-child(2)")
         time.sleep(1)
         #driver.find_element(By.ID, "direction-to").clear()
-        driver.find_element(By.ID, "direction-to").send_keys('Санкт-Петербург')
+        driver.find_element(By.ID, "direction-to").send_keys(city2)
         
         driver.find_element(By.CSS_SELECTOR, "div[class='rzd-direction rzd-direction-to'] li:nth-child(2)")
         time.sleep(1)
         driver.find_element(By.ID, "datepicker-from").clear()
-        driver.find_element(By.ID, "datepicker-from").send_keys(el)
+        driver.find_element(By.ID, "datepicker-from").send_keys(date)
         time.sleep(1)
         driver.find_element(By.CSS_SELECTOR, ".rzd-button-wrapper.rzd-cell.rzd-cell-15").click()
         #time.sleep(10)
@@ -60,6 +58,7 @@ class Rzdtemp():
             driver.find_element(By.CSS_SELECTOR, "rzd-search-results-card-railway-flat-card")
             subprocess.run(['notify-send', "У нас билетик"])
         except NoSuchElementException:
+            subprocess.run(['notify-send', "Билетов нет"])
             pass
 
     def tearDown(self):
@@ -67,8 +66,14 @@ class Rzdtemp():
         self.driver.close()
         self.driver.quit()
         
+print("Введите город отправления")
+city1 = input()
+print("Введите город назначения")
+city2 = input()
+print("Введите дату")
+date = input()
 logger = logging.getLogger('log')
 rzd = Rzdtemp(logger)
 rzd.setUp()
-rzd.test_rzdtemp()
+rzd.test_rzdtemp(city1, city2, date)
 rzd.tearDown()
