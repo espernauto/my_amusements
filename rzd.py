@@ -2,18 +2,17 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import ChromeOptions
 import time, re, logging
 #import winsound
-
 
 class Rzdtemp():
     def __init__(self, logger):
         self.logger = logger
     def setUp(self):
-        binary = r'/snap/bin/firefox'
-        options = Options()
-        options.binary = binary
-        self.driver = webdriver.Chrome()
+        options = ChromeOptions()
+        options.add_argument("--headless=new")
+        self.driver = webdriver.Chrome(options = options)
         self.driver.implicitly_wait(30)
         self.base_url = "http://ticket.rzd.ru/"
         self.verificationErrors = []
@@ -53,7 +52,7 @@ class Rzdtemp():
         driver.find_element(By.ID, "datepicker-from").send_keys(el)
         time.sleep(1)
         driver.find_element(By.CSS_SELECTOR, ".rzd-button-wrapper.rzd-cell.rzd-cell-15").click()
-        time.sleep(5)
+        #time.sleep(10)
         
         self.logger.info('Поиск нужных билетов...')
         #rawhtml = driver.find_element(By.ID, '.rzd-button-wrapper.rzd-cell.rzd-cell-15').get_attribute("innerHTML")
