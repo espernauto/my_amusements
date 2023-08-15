@@ -10,7 +10,7 @@ class Rzdtemp():
         self.logger = logger
     def setUp(self):
         options = ChromeOptions()
-        #options.add_argument("--headless=new")
+        options.add_argument("--headless=new")
         self.driver = webdriver.Chrome(options = options)
         self.driver.implicitly_wait(30)
         self.base_url = "http://ticket.rzd.ru/"
