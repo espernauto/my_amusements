@@ -3,15 +3,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import ChromeOptions
-import time, re, logging
-#import winsound
+import time, re, logging, subprocess
 
 class Rzdtemp():
     def __init__(self, logger):
         self.logger = logger
     def setUp(self):
         options = ChromeOptions()
-        options.add_argument("--headless=new")
+        #options.add_argument("--headless=new")
         self.driver = webdriver.Chrome(options = options)
         self.driver.implicitly_wait(30)
         self.base_url = "http://ticket.rzd.ru/"
@@ -58,10 +57,10 @@ class Rzdtemp():
         #rawhtml = driver.find_element(By.ID, '.rzd-button-wrapper.rzd-cell.rzd-cell-15').get_attribute("innerHTML")
         
         try:
-            driver.find_element(By.CSS_SELECTOR, "ui-kit-button[class='search-more-button-long tst-searchMore-searchCmmtNoTrain ng-star-inserted'] button[type='button']")
-            #subprocess.run(['notify-send', "У нас билетик"]
-        except NoSuchElementException:
+            driver.find_element(By.CSS_SELECTOR, "rzd-search-results-card-railway-flat-card")
             subprocess.run(['notify-send', "У нас билетик"])
+        except NoSuchElementException:
+            pass
 
     def tearDown(self):
         self.logger.info('Закрываем браузер...')
